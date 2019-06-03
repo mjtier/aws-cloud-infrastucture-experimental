@@ -6,7 +6,7 @@ automation on AWS.
 * An AWS user created named terraform with programatic access and AdministratorAccess permissions assigned in IAM.
 * We must use the AMI with the ID ami-04a3d424ed14a1996
 
-## Provisioning Software
+## Provisioning the Software
 There are 2 ways to provision software on an instance. You can bake your own custom AMI
 and bundle the desired end state software with the image using a tool like Packer https://packer.io/. 
 
@@ -29,3 +29,12 @@ Note that the .gitignore file ads a configuration to ignore all .tfvars files, s
 that we don't accidentlally check in AWS credentials into a GitHub repo.
 
 
+## SSH Key
+
+Create an SSH key for the *terraform* user.
+
+`ssh-keygen -f mykey"`
+
+
+## S3 Bucket Creattion
+The terraform file s3.tf creates the S3 bucket to store the cache snapshots.
