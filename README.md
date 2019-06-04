@@ -33,7 +33,7 @@ that we don't accidentlally check in AWS credentials into a GitHub repo.
 
 Create an SSH key for the *terraform* user.
 
-`ssh-keygen -f mykey"`
+`ssh-keygen -f mykey`
 
 
 ## S3 Bucket Creattion
