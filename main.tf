@@ -11,7 +11,7 @@ resource "aws_instance" "sqlite-cache" {
   ami                         = "${var.ami_id}"
   instance_type               = "t2.micro"
   key_name                    = "${aws_key_pair.mykey.key_name}"
-  // associate_public_ip_address = true
+  associate_public_ip_address = true
 
   tags = {
     Name      = "sqlite-cache"
@@ -27,28 +27,28 @@ resource "aws_instance" "sqlite-cache" {
 
   vpc_security_group_ids = ["${aws_security_group.cache-securitygroup.id}"]
 
-  /* SQLite DB Export Executable */
+  
   provisioner "file" {
-    source      = "${path.module}/config/nginx-default.conf"
-    destination = "/tmp/nginx-default.conf"
+    source      = "exportdb.sh"
+    destination = "/tmp/exportdb.sh"
   }
   
-  /* SQLite DB Importt Executable */
   provisioner "file" {
-    source      = "${path.module}/config/nginx.gzip.conf"
-    destination = "/tmp/nginx.gzip.conf"
+    source      = "exportdb.sh"
+    destination = "/tmp/exportdb.sh"
   }
-
-
-  /* NGINX install and setup */
+  
+  provisioner "file" {
+    source      = "importdb.sh"
+    destination = "/tmp/exportdb.sh"
+  }
+  
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update",
-      "sudo apt-get install nginx nginx-extras -y",
-      "sudo mv /tmp/nginx-default.conf /etc/nginx/sites-available/default",
-      "sudo mv /tmp/nginx.gzip.conf /etc/nginx/conf.d/gzip.conf",
-      "sudo systemctl enable nginx",
-      "sudo systemctl start nginx",
+      "sudo pip3 install --upgrade awscli",
+      "chmod a+x /tmp/export.db",
+      "chmod a+x /tmp/import.db",
+      "crontab -e */5 * * * *  /tmp/exportdb.sh"
     ]
   }
 
@@ -63,11 +63,11 @@ resource "aws_ami_from_instance" "cache-ami" {
 
 # Launch CONFIGURATION FOR AUTOSCALING 
 /*
-resource "aws_launch_configuration" "backend_server" {
-  name = "backend"
+resource "aws_launch_configuration" "db_server" {
+  name = "db"
 
-  image_id        = "${aws_ami_from_instance.backend-ami.id}"
-  instance_type   = "${var.ec2type}"
+  image_id        = "${aws_ami_from_instance.cache-ami.id}"
+  instance_type   = "t2.micro"
   security_groups = ["${aws_security_group.backend.id}"]
   key_name        = "${var.key_name}"
 
@@ -82,8 +82,8 @@ resource "aws_autoscaling_group" "backend_autoscaling" {
 
   launch_configuration = "${aws_launch_configuration.backend_server.id}"
   availability_zones   = ["${data.aws_availability_zones.available.names}"]
-  min_size             = 2
-  max_size             = 2
+  min_size             = 1
+  max_size             = 1
   health_check_type    = "EC2"
 
   lifecycle {
