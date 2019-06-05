@@ -1,4 +1,4 @@
-
+/*
 resource "aws_instance" "sqlite-cache-instance" {
   ami                    = "ami-04a3d424ed14a1996"
   instance_type          = "t2.micro"
@@ -9,7 +9,7 @@ resource "aws_instance" "sqlite-cache-instance" {
   #The file provisioner is used to copy files or directories from the machine executing Terraform to the newly created resource.
   iam_instance_profile = aws_iam_instance_profile.web_instance_profile.id
 }
-
+*/
 
 # Launch CONFIGURATION FOR AUTOSCALING 
 
