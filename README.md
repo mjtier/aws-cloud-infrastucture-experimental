@@ -36,5 +36,9 @@ Create an SSH key for the *terraform* user.
 `ssh-keygen -f mykey`
 
 
+## Creat an S3 bucket for db export & import scripts
+`aws s3 mb s3://scripts --region us-east-1`
+
+
 ## S3 Bucket Creattion
 The terraform file s3.tf creates the S3 bucket to store the cache snapshots.
