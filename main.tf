@@ -29,7 +29,7 @@ resource "aws_iam_policy_attachment" "test-attach" {
 
 resource "aws_iam_instance_profile" "test_profile" {
   name  = "test_profile"
-  roles = ["${aws_iam_role.test.name}"]
+  role = aws_iam_role.test.name
 }
 
 # Launch CONFIGURATION FOR AUTOSCALING 
@@ -44,7 +44,7 @@ resource "aws_launch_configuration" "db_server" {
     create_before_destroy = true
   }
   user_data = "${file("setup.sh")}"
-  iam_instance_profile = aws_iam_instance_profile.web_instance_profile.id
+  iam_instance_profile   = "${aws_iam_instance_profile.test_profile.name}"
   
 }
 
