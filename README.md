@@ -31,12 +31,17 @@ that we don't accidentlally check in AWS credentials into a GitHub repo.
 
 ## SSH Key
 
-Create an SSH key for the *terraform* user.
+Create an SSH key to be used in AWS key pair. 
 
-`ssh-keygen -f mykey`
+`ssh-keygen -f ec2_key`
 
+This will along with our security group automation will allow us 
+to SSH into each running instance in the autoscaling group.
 
-## Creat an S3 bucket for db export & import scripts
+## Creat a configuration S3 bucket 
+We need an S3 bucket to pull the configurations from for the dynamically created
+ec2 instances in the auto scaling group.
+
 `aws s3 mb s3://scripts --region us-east-1`
 
 
