@@ -4,7 +4,7 @@ automation on AWS.
 
 ## Assumptions
 * We must use the AMI with the ID ami-04a3d424ed14a1996.
-  ** This AMI must be AWS Linux 2. This will have AWS CLI already installed
+    * This AMI must be AWS Linux 2. This will have AWS CLI already installed
 * The user has the AWS CLI installed on their machine.
 * An AWS user created  with programatic access and AdministratorAccess permissions assigned in IAM.
   The AWS_ACCESS_KEY and AWS_SECRET_KEY must be know for this user.
