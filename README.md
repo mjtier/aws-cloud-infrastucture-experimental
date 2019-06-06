@@ -24,7 +24,7 @@ Create an SSH key to be used in AWS key pair.
 
 `ssh-keygen -f ec2_key`
 
-This will along with our security group automation will allow us 
+This, along with our security group automation, will allow us 
 to SSH into each running instance in the autoscaling group.
 
 ### Create S3 bucket
