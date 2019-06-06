@@ -24,7 +24,6 @@ variable "availability_zones" {
   default     = "us-east-1a"
 }
 
-
 variable "my_bucket_name" {
   type    = string
   default = "mjtier.development.terraform.provisioning"
