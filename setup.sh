@@ -1,27 +1,31 @@
 #!/usr/bin/env bash
 
-mkdir -p /home/ec2-user/backup_db
+# Set this working directory to the directory on your EC2 instance
+# were you would like to work out of
+WORKING_DIR = /home/ec2-user
 
-FILE=/home/ec2-user/import_db/cache.db
+mkdir -p $WORKING_DIR/backup_db
+mkdir -p $WORKING_DIR/import_db
 
-# warm the db
-mkdir -p /home/ec2-user/import_db
-aws s3 cp  s3://mjtier.development.terraform.provisioning/cache.db $FILE
+IMPORT_FILE=$WORKING_DIRr/import_db/cache.db
+EXPORT_FILE=$WORKING_DIR/backup_db/cache.db
+
+# Attempt to copy an existing backup
+aws s3 cp  s3://mjtier.development.terraform.provisioning/cache.db $IMPORT_FILE
 
 # if the cahced db from the s3 bucket was copied, this is not the first time
 # that the infastructure was provisioned by terraform
 
-if [ -f "$FILE" ]; then
-    echo "$FILE exist"
-    sqlite3 .read $FILE
+if [ -f "$IMPORT_FILE" ]; then
+    echo "$IMPORT_FILE exist"
+    sqlite3 .read $IMPORT_FILE
 fi
 
+# We have read teh import file, so now we can delete it
+rm -rf $IMPORT_FILE
 
-
-# setup cron job to run every 5 minutes to export the database
-mkdir -p  /home/ec2/backup_db
 # grab the export script from an s3 bucket
-aws s3 cp  s3://mjtier.development.terraform.provisioning/exportdb.sh /home/ec2-user/exportdb.sh
-chmod a+x /home/ec2-user/exportdb.sh
-
+aws s3 cp  s3://mjtier.development.terraform.provisioning/exportdb.sh $WORKING_DIR/exportdb.sh
+chmod a+x $WORKING_DIR/exportdb.sh
+# setup cron job to run every 5 minutes to export the database
 echo "$(echo '*/5 * * * * /home/ec2-user/exportdb.sh' ; crontab -l)" | crontab -
