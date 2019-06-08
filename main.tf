@@ -1,15 +1,3 @@
-/*
-resource "aws_instance" "sqlite-cache-instance" {
-  ami                    = "ami-04a3d424ed14a1996"
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.keypair.key_name
-  vpc_security_group_ids = [aws_security_group.CacheSecurityGroup.id]
-  subnet_id              = aws_subnet.default.id
-
-  #The file provisioner is used to copy files or directories from the machine executing Terraform to the newly created resource.
-  iam_instance_profile = aws_iam_instance_profile.web_instance_profile.id
-}
-*/
 resource "aws_iam_role" "test" {
   name               = "test-role"
   assume_role_policy = "${file("assume-role-policy.json")}"
